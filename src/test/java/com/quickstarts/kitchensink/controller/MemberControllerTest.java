@@ -18,7 +18,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+import com.quickstarts.kitchensink.util.JwtTestUtil;
 @SpringBootTest
 @AutoConfigureMockMvc
 @Disabled
@@ -45,7 +45,10 @@ class MemberControllerTest extends MongoTestingUtil {
         member.setEmail("this@gmail.com");
         member.setPhoneNumber("1234567890");
 
+        String jwtToken = JwtTestUtil.generateToken("user");
+
         mockMvc.perform(post("/members")
+                        .header("Authorization", "Bearer " + jwtToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(member)))
                 .andExpect(status().isOk())
@@ -68,8 +71,8 @@ class MemberControllerTest extends MongoTestingUtil {
 
         memberRepository.save(member1);
         memberRepository.save(member2);
-
-        mockMvc.perform(get("/members"))
+        String jwtToken = JwtTestUtil.generateToken("user");
+        mockMvc.perform(get("/members").header("Authorization", "Bearer " + jwtToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].name").value("Akhil"))
@@ -82,8 +85,9 @@ class MemberControllerTest extends MongoTestingUtil {
         member.setName("Set");
         member.setEmail("akhil@gmail.com");
         Member savedMember = memberRepository.save(member);
+        String jwtToken = JwtTestUtil.generateToken("user");
 
-        mockMvc.perform(get("/members/{id}", savedMember.getId()))
+        mockMvc.perform(get("/members/{id}", savedMember.getId()).header("Authorization", "Bearer " + jwtToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("Set"))
                 .andExpect(jsonPath("$.email").value("akhil@gmail.com"));
@@ -91,7 +95,8 @@ class MemberControllerTest extends MongoTestingUtil {
 
     @Test
     void shouldReturn404WhenMemberNotFound() throws Exception {
-        mockMvc.perform(get("/members/{id}", "9999"))
+        String jwtToken = JwtTestUtil.generateToken("user");
+        mockMvc.perform(get("/members/{id}", "9999").header("Authorization", "Bearer " + jwtToken))
                 .andExpect(status().isNotFound());
     }
 
@@ -108,8 +113,9 @@ class MemberControllerTest extends MongoTestingUtil {
         member2.setName("Set1");
         member2.setEmail("set@gmail.com");
         member2.setPhoneNumber("0987654321");
-
+        String jwtToken = JwtTestUtil.generateToken("user");
         mockMvc.perform(post("/members")
+                        .header("Authorization", "Bearer " + jwtToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(member1)))
                 .andExpect(status().isOk());

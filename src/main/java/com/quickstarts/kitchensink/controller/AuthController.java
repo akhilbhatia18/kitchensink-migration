@@ -21,13 +21,12 @@ public class AuthController {
 
     @PostMapping("/login")
     public String login(@RequestBody LoginRequest loginRequest) {
-        // Authenticate user
+
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginRequest.getUsername(), loginRequest.getPassword()
                 )
         );
-        // Generate JWT token
         return jwtUtil.generateToken(loginRequest.getUsername());
     }
 }

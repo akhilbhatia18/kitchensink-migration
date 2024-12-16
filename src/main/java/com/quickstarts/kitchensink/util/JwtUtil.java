@@ -18,7 +18,6 @@ public class JwtUtil {
     public JwtUtil() {
 
     }
-    // Generate JWT Token
     public String generateToken(String username) {
         return Jwts.builder()
                 .setSubject(username)
@@ -28,7 +27,6 @@ public class JwtUtil {
                 .compact();
     }
 
-    // Extract username from the JWT Token
     public String extractUsername(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(key)
@@ -38,13 +36,11 @@ public class JwtUtil {
                 .getSubject();
     }
 
-    // Validate the JWT Token
     public boolean validateToken(String token, String username) {
         String extractedUsername = extractUsername(token);
         return (extractedUsername.equals(username) && !isTokenExpired(token));
     }
 
-    // Check if the JWT token is expired
     private boolean isTokenExpired(String token) {
         Date expiration = Jwts.parserBuilder()
                 .setSigningKey(key)

@@ -27,15 +27,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         String authorizationHeader = request.getHeader("Authorization");
 
-        // Check if the token is present and starts with "Bearer "
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            String token = authorizationHeader.substring(7);  // Remove "Bearer " prefix
-            String username = jwtUtil.extractUsername(token);  // Extract username from token
+            String token = authorizationHeader.substring(7);
+            String username = jwtUtil.extractUsername(token);
 
-            // If username is valid and the context is not set, set the authentication
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 if (jwtUtil.validateToken(token, username)) {
-                    // Set the authentication in the security context
+
                     SecurityContextHolder.getContext().setAuthentication(
                             new UsernamePasswordAuthenticationToken(username, null, null)
                     );
@@ -43,6 +41,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
         }
 
-        filterChain.doFilter(request, response);  // Continue with the filter chain
+        filterChain.doFilter(request, response);
     }
 }

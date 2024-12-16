@@ -49,11 +49,11 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.disable()) // Disable CSRF for REST APIs
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs", "/swagger-resources/**", "/webjars/**").permitAll()
-                        .requestMatchers("/api/auth/login").permitAll() // Allow login without authentication
-                        .anyRequest().authenticated() // Secure all other endpoints
+                        .requestMatchers("/api/auth/login").permitAll()
+                        .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)); // Stateless session
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         return http.build();
     }

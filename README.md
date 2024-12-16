@@ -1,7 +1,5 @@
 # kitchensink-migration
 
-Here’s the README file in its final form:
-
 ---
 
 # **KitchenSink Application**
@@ -84,12 +82,12 @@ cd kitchensink-migration
    mvn spring-boot:run
    ```
 
-The application will start on `http://localhost:8080`.
+The application will start on `http://localhost:8085`.
 
 ### **5. Access the APIs**
 - **Registration Endpoint**:
   ```bash
-  POST http://localhost:8080/api/members
+  POST http://localhost:8085/api/members
   Content-Type: application/json
   Body:
   {
@@ -98,12 +96,6 @@ The application will start on `http://localhost:8080`.
     "phoneNumber": "1234567890"
   }
   ```
-### **6. Access Swagger**
-Open a web browser and navigate to
-  ```bash
-     http://localhost:8085/swagger-ui.html
-  ```
-
 - **Validation**: If the input is invalid, appropriate error messages will be returned.
 
 ---
